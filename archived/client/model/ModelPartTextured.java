@@ -3,10 +3,11 @@ package farn.pacman_arcade.client.model;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.Quad;
 import net.minecraft.client.model.Vertex;
-import net.minecraft.client.render.entity.model.EntityModel;
 
+//Replace by json Model
+@Deprecated
 public class ModelPartTextured extends ModelPart {
-    public ModelPartTextured(EntityModel part, int u, int v) {
+    public ModelPartTextured(int u, int v) {
         super(u, v);
     }
 

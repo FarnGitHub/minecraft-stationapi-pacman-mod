@@ -2,40 +2,49 @@ package farn.pacman_arcade.block;
 
 import farn.pacman_arcade.PacManTextureListener;
 import farn.pacman_arcade.PacmanMain;
+import farn.pacman_arcade.block.entity.PacManBlockEntity;
+import farn.pacman_arcade.block.material.ArcadeMaterial;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.block.BlockState;
-import net.modificationstation.stationapi.api.template.block.TemplateBlock;
+import net.modificationstation.stationapi.api.item.ItemPlacementContext;
+import net.modificationstation.stationapi.api.state.StateManager;
+import net.modificationstation.stationapi.api.state.property.Properties;
+import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.List;
 import java.util.Random;
 
-public class PacmanArcadeBlock extends TemplateBlock implements PacmanArcade {
+public class PacmanArcadeBlock extends TemplateBlockWithEntity implements PacmanArcade {
     public PacmanArcadeBlock(Identifier id, int texture) {
-        super(id, texture, PacmanMain.metalMaterial);
+        super(id, texture, ArcadeMaterial.ARCADE);
     }
 
     @Override
-    public int getDroppedItemId(int par1, Random par2Random) {
+    public int getDroppedItemId(int meta, Random rand) {
         return PacmanMain.pacmanItem.id;
     }
 
     @Override
-    public void onPlaced(World par1World, int par2, int par3, int par4, LivingEntity par5EntityLiving) {
-        int var6 = MathHelper.floor((double)(par5EntityLiving.yaw * 4.0f / 360.0f) + 0.5) & 3;
-        par1World.setBlockMeta(par2, par3, par4, var6);
-        par1World.setBlockMeta(par2, par3 + 1, par4, var6);
+    public void onPlaced(World world, int x, int y, int z, LivingEntity entity) {
+        int meta = MathHelper.floor((double)(entity.yaw * 4.0f / 360.0f) + 0.5) & 3;
+        world.setBlockMeta(x, y, z, meta);
+        if(entity instanceof PlayerEntity player && world.getBlockEntity(x, y, z) instanceof PacManBlockEntity pacman) {
+            pacman.placer = player.name;
+        }
     }
 
     @Override
-    public void neighborUpdate(World world, int x, int y, int z, int md) {
+    public void neighborUpdate(World world, int x, int y, int z, int meta) {
         if (world.getBlockId(x, y + 1, z) != PacmanMain.pacmanArcadeTop.id) {
             world.setBlock(x, y, z, 0);
         }
@@ -43,22 +52,28 @@ public class PacmanArcadeBlock extends TemplateBlock implements PacmanArcade {
 
     @Override
     public void onPlaced(World world, int x, int y, int z) {
-        world.setBlock(x, y + 1, z, PacmanMain.pacmanArcadeTop.id);
-        StationAPI.LOGGER.info(PacmanMain.pacmanArcadeTop.id);
+        super.onPlaced(world, x, y, z);
+        BlockState newState = PacmanMain.pacmanArcadeTop.getDefaultState().with(Properties.HORIZONTAL_FACING, world.getBlockState(x,y,z).get(Properties.HORIZONTAL_FACING));
+        world.setBlockState(x, y + 1, z, newState);
     }
 
     @Override
-    public boolean canPlaceAt(World par1World, int par2, int par3, int par4) {
-        return super.canPlaceAt(par1World, par2, par3, par4) && super.canPlaceAt(par1World, par2, par3 + 1, par4) && par3 + 1 < par1World.getTopY();
+    protected BlockEntity createBlockEntity() {
+        return new PacManBlockEntity();
+    }
+
+    @Override
+    public boolean canPlaceAt(World world, int x, int y, int z) {
+        return super.canPlaceAt(world, x, y, z) && super.canPlaceAt(world, x, y + 1, z) && y + 1 < world.getTopY();
     }
 
     @Environment(EnvType.CLIENT)
     @Override
-    public int getTexture(int side, int md) {
+    public int getTexture(int side, int meta) {
         if (side == 0 || side == 1) {
             return PacManTextureListener.bottomTexture;
         }
-        return PacManTextureListener.textures[md * 4 + (side - 2)];
+        return PacManTextureListener.textures[meta * 4 + (side - 2)];
     }
 
     @Override
@@ -68,9 +83,48 @@ public class PacmanArcadeBlock extends TemplateBlock implements PacmanArcade {
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        if(!world.isRemote)
-            this.openArcadeScreen(player);
+        if(!world.isRemote && world.getBlockEntity(x, y, z) instanceof PacManBlockEntity pacman) {
+            if(pacman.placer.equals(player.name) && player.isSneaking()) {
+                int coinsLeft = pacman.coins;
+                if(coinsLeft > 64) {
+                    int coinsStacks = pacman.coins / 64;
+                    coinsLeft = pacman.coins % 64;
+                    for(int i = 0; i < coinsStacks; i++)
+                        player.inventory.addStack(new ItemStack(PacmanMain.pacmanCoins, 64));
+                }
+                if(coinsLeft > 0) {
+                    player.inventory.addStack(new ItemStack(PacmanMain.pacmanCoins, coinsLeft));
+                }
+                pacman.coins = 0;
+                return true;
+            } else if(pacman.insertCoins(player)) {
+                this.openArcadeScreen(player);
+                return true;
+            }
+
+        }
         return false;
     }
 
+    @Override
+    public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(Properties.HORIZONTAL_FACING);
+    }
+
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext context) {
+        Direction direction = context.getHorizontalPlayerFacing().rotateClockwise(Direction.Axis.Y);
+
+        return getDefaultState().with(Properties.HORIZONTAL_FACING, direction);
+    }
+
+    public void onBreak(World world, int x, int y, int z) {
+        dropCoins(world, x, y, z);
+        super.onBreak(world, x, y, z);
+    }
+
+    @Override
+    public void BlockDropStack(World world, int x, int y, int z, ItemStack stack) {
+        this.dropStack(world, x, y, z, stack);
+    }
 }

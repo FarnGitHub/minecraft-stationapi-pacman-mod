@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "pacman_arcade:block/pacman_arcade_block_top", "y": 0},
+    "facing=east": { "model": "pacman_arcade:block/pacman_arcade_block_top", "y": 90 },
+    "facing=south": { "model": "pacman_arcade:block/pacman_arcade_block_top", "y": 180 },
+    "facing=west": { "model": "pacman_arcade:block/pacman_arcade_block_top", "y": 270 }
+  }
+}
