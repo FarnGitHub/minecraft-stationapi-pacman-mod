@@ -1,8 +1,5 @@
 package farn.pacman_arcade.game.gui;
 
-
-import java.util.Random;
-
 import farn.pacman_arcade.game.*;
 import farn.pacman_arcade.game.entity.Ghost;
 import farn.pacman_arcade.game.entity.Pacman;
@@ -27,12 +24,7 @@ public class PacmanArcadeGUI extends Screen {
     public int downKey = 31;
     public int rightKey = 32;
     public MenuButton start;
-    public boolean oneUp;
     public boolean started;
-    public boolean movingUp;
-    public boolean movingLeft;
-    public boolean movingDown;
-    public boolean movingRight;
     public boolean energized;
     public boolean render;
     public boolean editingUp;
@@ -42,7 +34,6 @@ public class PacmanArcadeGUI extends Screen {
     public long tick;
     public long energizerTick;
     public long renderTick;
-    public Random rand = new Random();
     public PlayerEntity player;
     public String[] board = new String[]{"n3111111111111111116n", "n2000000000000000002n", "n2e110111010111011e2n", "n2000000000000000002n", "n2011020117110201102n", "n2000020002000200002n", "n51160t1102011903114n", "nnnn2020000000202nnnn", "1111402031g1602051111", "p00000002sss20000000p", "111160205111402031111", "nnnn202000y000202nnnn", "n3114020117110205116n", "n2000000002000000002n", "n2016011102011103102n", "n2e020000000000020e2n", "nt102020117110202019n", "n2000020002000200002n", "n2011181102011811102n", "n2000000000000000002n", "n5111111111111111114n"};
     public GameMap theMap;
@@ -65,10 +56,9 @@ public class PacmanArcadeGUI extends Screen {
         this.player = player;
     }
 
-    /*@Override
-    public boolean func_73868_f() {
+    public boolean shouldPause() {
         return false;
-    }*/
+    }
 
     public void addButtons(int screen) {
         if (screen == 1) {

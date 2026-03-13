@@ -2,13 +2,15 @@
   "schemaVersion": 1,
   "id": "pacman_arcade",
   "version": "${version}",
-  "name": "Thread",
-  "description": "Make Screenshot run on seperate thread from the main minecraft thread",
+  "name": "Pacman Arcade",
+  "description": "Adds an arcade machine into the game, with a playable pacman minigame!",
   "authors": [
-    "farnfarn02"
+    "formulayeti (original)",
+    "farnfarn02 (backport)"
   ],
   "license": "MIT",
-  "environment": "client",
+  "environment": "*",
+  "icon": "assets/pacman_arcade/icon.png",
   "entrypoints": {
     "stationapi:event_bus": [
       "farn.pacman_arcade.PacmanMain"
@@ -17,8 +19,6 @@
       "farn.pacman_arcade.PacManTextureListener"
     ]
   },
-  "mixins": [
-  ],
   "accessWidener": "pacman_arcade.classTweaker",
   "depends": {
     "minecraft": "1.0.0-beta.7.3"

@@ -4,9 +4,8 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.client.texture.atlas.ExpandableAtlas;
-import net.modificationstation.stationapi.api.util.Identifier;
-import net.modificationstation.stationapi.api.util.Namespace;
 
+@SuppressWarnings("unused")
 public class PacManTextureListener {
 
     public static int[] textures = new int[16];
@@ -27,6 +26,7 @@ public class PacManTextureListener {
         leftTexture = getTexture(terrainAtlas, "block/pacman/arcade_left");
         rightTexture = getTexture(terrainAtlas, "block/pacman/arcade_right");
         PacmanMain.pacmanItem.setTexture(PacmanMain.NAMESPACE.id("item/pacman_arcade_icon"));
+        PacmanMain.pacmanCoins.setTexture(PacmanMain.NAMESPACE.id("item/pacman_coins"));
         int[] sides = new int[]{3, 2, 5, 4, 5, 4, 2, 3, 2, 3, 4, 5, 4, 5, 3, 2};
         for(int i = 0; i < sides.length; i++) {
             textures[i] = setTexture(sides[i]);

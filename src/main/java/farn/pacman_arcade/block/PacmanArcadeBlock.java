@@ -4,8 +4,6 @@ import farn.pacman_arcade.PacManTextureListener;
 import farn.pacman_arcade.PacmanMain;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.MapColor;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -19,7 +17,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import java.util.List;
 import java.util.Random;
 
-public class PacmanArcadeBlock extends TemplateBlock {
+public class PacmanArcadeBlock extends TemplateBlock implements PacmanArcade {
     public PacmanArcadeBlock(Identifier id, int texture) {
         super(id, texture, PacmanMain.metalMaterial);
     }
@@ -55,14 +53,6 @@ public class PacmanArcadeBlock extends TemplateBlock {
     }
 
     @Environment(EnvType.CLIENT)
-    public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        if (BLOCKS[world.getBlockId(x, y + 1, z)] instanceof PacmanArcadeBlockTop top) {
-            return top.onUse(world, x, y, z, player);
-        }
-        return true;
-    }
-
-    @Environment(EnvType.CLIENT)
     @Override
     public int getTexture(int side, int md) {
         if (side == 0 || side == 1) {
@@ -75,4 +65,12 @@ public class PacmanArcadeBlock extends TemplateBlock {
     public List<ItemStack> getDropList(World world, int x, int y, int z, BlockState state, int meta) {
         return List.of(new ItemStack(PacmanMain.pacmanItem));
     }
+
+    @Override
+    public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
+        if(!world.isRemote)
+            this.openArcadeScreen(player);
+        return false;
+    }
+
 }

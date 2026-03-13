@@ -4,6 +4,8 @@ import farn.pacman_arcade.block.PacmanArcadeBlock;
 import farn.pacman_arcade.block.PacmanArcadeBlockTop;
 import farn.pacman_arcade.client.entity.PacManBlockEntityRenderer;
 import farn.pacman_arcade.block.entity.PacManBlockEntity;
+import farn.pacman_arcade.item.CoinItem;
+import farn.pacman_arcade.packet.OpenScreenPacket;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.achievement.Achievement;
 import net.minecraft.achievement.Achievements;
@@ -11,16 +13,21 @@ import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
-import net.modificationstation.stationapi.api.StationAPI;
+import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.client.event.block.entity.BlockEntityRendererRegisterEvent;
 import net.modificationstation.stationapi.api.event.achievement.AchievementRegisterEvent;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
+import net.modificationstation.stationapi.api.event.recipe.RecipeRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
+import net.modificationstation.stationapi.api.event.registry.MessageListenerRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.recipe.CraftingRegistry;
 import net.modificationstation.stationapi.api.template.item.TemplateSecondaryBlockItem;
 import net.modificationstation.stationapi.api.util.Namespace;
+import net.modificationstation.stationapi.api.util.SideUtil;
 
+@SuppressWarnings("unused")
 public class PacmanMain {
 	@Entrypoint.Namespace
 	public static Namespace NAMESPACE;
@@ -28,6 +35,7 @@ public class PacmanMain {
 	public static Block pacmanArcadeBottom;
 	public static Block pacmanArcadeTop;
 	public static Item pacmanItem;
+	public static Item pacmanCoins;
 	public static Achievement openPacman;
 	public static Material metalMaterial = new Material(MapColor.LIGHT_GRAY);
 
@@ -40,7 +48,7 @@ public class PacmanMain {
 	@EventListener
 	public void registerItem(ItemRegistryEvent event) {
 		pacmanItem = (new TemplateSecondaryBlockItem(NAMESPACE.id("arcade_item"), pacmanArcadeBottom)).setTranslationKey(NAMESPACE, "pacman_arcade_item");
-		StationAPI.LOGGER.info("Pacman item id: " + NAMESPACE.id("arcade_item"));
+		pacmanCoins = new CoinItem(NAMESPACE.id("coins")).setTranslationKey(NAMESPACE, "coins");
 	}
 
 	@EventListener
@@ -56,5 +64,17 @@ public class PacmanMain {
 	@EventListener
 	public void registerBlockRenderer(BlockEntityRendererRegisterEvent event) {
 		event.renderers.put(PacManBlockEntity.class, new PacManBlockEntityRenderer());
+	}
+
+	@EventListener
+	public void registerRecipe(RecipeRegisterEvent event) {
+		if(event.recipeId.equals(RecipeRegisterEvent.Vanilla.CRAFTING_SHAPED.type())) {
+			CraftingRegistry.addShapedRecipe(new ItemStack(pacmanItem), "WWW", "YGY", "WRW", 'W', Block.PLANKS, 'Y', new ItemStack(Item.DYE, 1, 11), 'G', Block.GLASS, 'R', Item.REDSTONE);
+		}
+	}
+
+	@EventListener
+	public void registerPacket(MessageListenerRegistryEvent event) {
+		event.register(NAMESPACE.id("arcade_open"), (player, msg) -> SideUtil.run(OpenScreenPacket::run, () -> {}));
 	}
 }
