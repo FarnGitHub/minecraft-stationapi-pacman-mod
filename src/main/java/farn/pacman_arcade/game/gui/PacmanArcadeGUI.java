@@ -60,6 +60,7 @@ public class PacmanArcadeGUI extends Screen {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     public void addButtons(int screen) {
         if (screen == 1) {
             this.buttons.clear();
@@ -72,10 +73,10 @@ public class PacmanArcadeGUI extends Screen {
             this.buttons.add(new ButtonWidget(7, this.width / 2 - 15, this.height / 2 + 90, 30, 10, "Menu"));
         } else if (screen == 3) {
             this.buttons.clear();
-            this.buttons.add(new ButtonWidget(3, this.width / 2 - 70, this.height / 2 - 50, 50, 20, !this.editingUp ? Keyboard.getKeyName((int)this.upKey) : "???"));
-            this.buttons.add(new ButtonWidget(4, this.width / 2 - 70, this.height / 2 - 20, 50, 20, !this.editingLeft ? Keyboard.getKeyName((int)this.leftKey) : "???"));
-            this.buttons.add(new ButtonWidget(5, this.width / 2 - 70, this.height / 2 + 10, 50, 20, !this.editingDown ? Keyboard.getKeyName((int)this.downKey) : "???"));
-            this.buttons.add(new ButtonWidget(6, this.width / 2 - 70, this.height / 2 + 40, 50, 20, !this.editingRight ? Keyboard.getKeyName((int)this.rightKey) : "???"));
+            this.buttons.add(new ButtonWidget(3, this.width / 2 - 70, this.height / 2 - 50, 50, 20, !this.editingUp ? Keyboard.getKeyName(this.upKey) : "???"));
+            this.buttons.add(new ButtonWidget(4, this.width / 2 - 70, this.height / 2 - 20, 50, 20, !this.editingLeft ? Keyboard.getKeyName(this.leftKey) : "???"));
+            this.buttons.add(new ButtonWidget(5, this.width / 2 - 70, this.height / 2 + 10, 50, 20, !this.editingDown ? Keyboard.getKeyName(this.downKey) : "???"));
+            this.buttons.add(new ButtonWidget(6, this.width / 2 - 70, this.height / 2 + 40, 50, 20, !this.editingRight ? Keyboard.getKeyName(this.rightKey) : "???"));
             this.buttons.add(new ButtonWidget(7, this.width / 2 - 80, this.height / 2 + 77, 50, 20, "Menu"));
         } else if (screen == 4) {
             this.buttons.clear();
@@ -186,17 +187,17 @@ public class PacmanArcadeGUI extends Screen {
     }
 
     public void updateKeys() {
-        if (Keyboard.isKeyDown((int)this.upKey) && this.thePacman.canMove(3) && !this.thePacman.getDead()) {
-            this.thePacman.setMoving(3);
+        if (Keyboard.isKeyDown(this.upKey) && this.thePacman.canMove(3) && !this.thePacman.getDead()) {
+            this.thePacman.setMovingDirection(3);
         }
-        if (Keyboard.isKeyDown((int)this.leftKey) && this.thePacman.canMove(2) && !this.thePacman.getDead()) {
-            this.thePacman.setMoving(2);
+        if (Keyboard.isKeyDown(this.leftKey) && this.thePacman.canMove(2) && !this.thePacman.getDead()) {
+            this.thePacman.setMovingDirection(2);
         }
-        if (Keyboard.isKeyDown((int)this.downKey) && this.thePacman.canMove(1) && !this.thePacman.getDead()) {
-            this.thePacman.setMoving(1);
+        if (Keyboard.isKeyDown(this.downKey) && this.thePacman.canMove(1) && !this.thePacman.getDead()) {
+            this.thePacman.setMovingDirection(1);
         }
-        if (Keyboard.isKeyDown((int)this.rightKey) && this.thePacman.canMove(0) && !this.thePacman.getDead()) {
-            this.thePacman.setMoving(0);
+        if (Keyboard.isKeyDown(this.rightKey) && this.thePacman.canMove(0) && !this.thePacman.getDead()) {
+            this.thePacman.setMovingDirection(0);
         }
     }
 
@@ -206,13 +207,13 @@ public class PacmanArcadeGUI extends Screen {
             this.animation.updateMenuAnimation();
         }
         if (this.currentScreen == 2) {
-            if (this.tick % 8L == 0L && this.started && this.currentScreen == 2 && this.pinky.getMode() == 0 && this.inky.getMode() == 0 && this.clyde.getMode() == 0 && this.blinky.getMode() == 0) {
+            if (this.tick % 8L == 0L && this.started && this.pinky.getMode() == 0 && this.inky.getMode() == 0 && this.clyde.getMode() == 0 && this.blinky.getMode() == 0) {
                 this.minecraft.soundManager.playSound("pacman_arcade:pacman.ghost", 1.0f, 1.0f);
             }
-            if (this.tick % 6L == 0L && this.started && this.currentScreen == 2 && this.pinky.getMode() == 1 || this.tick % 6L == 0L && this.started && this.currentScreen == 2 && this.inky.getMode() == 1 || this.tick % 6L == 0L && this.started && this.currentScreen == 2 && this.clyde.getMode() == 1 || this.tick % 6L == 0L && this.started && this.currentScreen == 2 && this.blinky.getMode() == 1) {
+            if (this.tick % 6L == 0L && this.started && this.pinky.getMode() == 1 || this.tick % 6L == 0L && this.started && this.inky.getMode() == 1 || this.tick % 6L == 0L && this.started && this.clyde.getMode() == 1 || this.tick % 6L == 0L && this.started && this.blinky.getMode() == 1) {
                 this.minecraft.soundManager.playSound("pacman_arcade:pacman.ghostflash", 1.0f, 1.0f);
             }
-            if (this.tick % 6L == 0L && this.started && this.currentScreen == 2 && this.pinky.getMode() == 2 || this.tick % 6L == 0L && this.started && this.currentScreen == 2 && this.inky.getMode() == 2 || this.tick % 6L == 0L && this.started && this.currentScreen == 2 && this.clyde.getMode() == 2 || this.tick % 6L == 0L && this.started && this.currentScreen == 2 && this.blinky.getMode() == 2) {
+            if (this.tick % 6L == 0L && this.started && this.pinky.getMode() == 2 || this.tick % 6L == 0L && this.started && this.inky.getMode() == 2 || this.tick % 6L == 0L && this.started && this.clyde.getMode() == 2 || this.tick % 6L == 0L && this.started && this.blinky.getMode() == 2) {
                 this.minecraft.soundManager.playSound("pacman_arcade:pacman.ghostdead", 1.0f, 1.0f);
             }
             if (this.dotsLeft == 0) {
@@ -253,7 +254,7 @@ public class PacmanArcadeGUI extends Screen {
             this.blinky.update(this.minecraft, this, this.theMap);
             if ((this.thePacman.boundingBox.intersects(this.pinky.boundingBox) && this.pinky.mode == 0 || this.thePacman.boundingBox.intersects(this.inky.boundingBox) && this.inky.mode == 0 || this.thePacman.boundingBox.intersects(this.clyde.boundingBox) && this.clyde.mode == 0 || this.thePacman.boundingBox.intersects(this.blinky.boundingBox) && this.blinky.mode == 0) && !this.thePacman.getDead()) {
                 this.thePacman.setDead(this.minecraft);
-                this.thePacman.setMoving(5);
+                this.thePacman.setMovingDirection(5);
             }
             if (this.thePacman.boundingBox.intersects(this.pinky.boundingBox) && this.pinky.mode == 1) {
                 this.minecraft.soundManager.playSound("pacman_arcade:pacman.eatghost", 1.0f, 1.0f);
@@ -334,24 +335,31 @@ public class PacmanArcadeGUI extends Screen {
     }
 
     @Override
-    public void render(int i, int j, float f) {
-        if (this.currentScreen == 0) {
-            this.drawSplash();
-        }
-        if (this.currentScreen == 1) {
-            this.drawMenu(i, j, f);
-        }
-        if (this.currentScreen == 2) {
-            this.drawGame(i, j, f);
-        }
-        if (this.currentScreen == 3) {
-            this.drawOptions(i, j, f);
-        }
-        if (this.currentScreen == 4) {
-            this.drawAbout(i, j, f);
-        }
-        if (this.currentScreen == 5) {
-            this.drawDeath(i, j, f, this.currentScore);
+    public void render(int mouseX, int mouseY, float tick) {
+        switch (this.currentScreen) {
+            case 0 : {
+                this.drawSplash();
+                return;
+            }
+            case 1 : {
+                this.drawMenu(mouseX, mouseY, tick);
+                return;
+            }
+            case 2 : {
+                this.drawGame(mouseX, mouseY, tick);
+                return;
+            }
+            case 3 : {
+                this.drawOptions(mouseX, mouseY, tick);
+                return;
+            }
+            case 4: {
+                this.drawAbout(mouseX, mouseY, tick);
+                return;
+            }
+            case 5: {
+                this.drawDeath(mouseX, mouseY, tick, this.highScore);
+            }
         }
     }
 
@@ -365,19 +373,19 @@ public class PacmanArcadeGUI extends Screen {
         }
     }
 
-    public void drawMenu(int i, int j, float f) {
+    public void drawMenu(int x, int y, float tick) {
         this.drawBG(0, 0, true);
         this.fill(this.width / 2 - 64, this.height / 2 - 80, this.width / 2 + 64, this.height / 2 + 80, -16777216);
-        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-        GL11.glEnable((int)3042);
-        GL11.glBindTexture((int)3553, (int)this.minecraft.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/menu.png"));
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glEnable(3042);
+        GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/menu.png"));
         this.drawTexture(this.width / 2 - 56, this.height / 2 - 75, 0, 0, 112, 32);
-        super.render(i, j, f);
-        GL11.glDisable((int)3042);
+        super.render(x, y, tick);
+        GL11.glDisable(3042);
         this.animation.animateMenu(this.minecraft, this, 0, -25);
     }
 
-    public void drawGame(int i, int j, float f) {
+    public void drawGame(int x, int y, float tick) {
         this.drawBG(0, 0, true);
         this.drawCenteredTextWithShadow(this.textRenderer, "High: " + this.highScore, this.width / 2 + 40, this.height / 2 - 95, 0xFFFFFF);
         this.drawCenteredTextWithShadow(this.textRenderer, "Round: " + this.round, this.width / 2 + 40, this.height / 2 + 87, 0xFFFFFF);
@@ -406,30 +414,30 @@ public class PacmanArcadeGUI extends Screen {
                 this.drawTextWithShadow(this.textRenderer, "" + this.prevFlashyScore, this.width / 2 + this.blinky.currentX, this.height / 2 + this.blinky.currentY, 0xFFFFFF);
             }
         }
-        super.render(i, j, f);
+        super.render(x, y, tick);
     }
 
-    public void drawOptions(int i, int j, float f) {
+    public void drawOptions(int x, int y, float tick) {
         this.drawBG(0, 0, true);
-        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-        GL11.glEnable((int)3042);
-        GL11.glBindTexture((int)3553, (int)this.minecraft.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/menu.png"));
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glEnable(3042);
+        GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/menu.png"));
         this.drawTexture(this.width / 2 - 44, this.height / 2 - 85, 56, 32, 88, 16);
         this.drawTextWithShadow(this.textRenderer, "Move Pacman Up", this.width / 2 - 15, this.height / 2 - 45, 0xFFFFFF);
         this.drawTextWithShadow(this.textRenderer, "Move Pacman Left", this.width / 2 - 15, this.height / 2 - 15, 0xFFFFFF);
         this.drawTextWithShadow(this.textRenderer, "Move Pacman Down", this.width / 2 - 15, this.height / 2 + 15, 0xFFFFFF);
         this.drawTextWithShadow(this.textRenderer, "Move Pacman Right", this.width / 2 - 15, this.height / 2 + 45, 0xFFFFFF);
-        GL11.glDisable((int)3042);
-        super.render(i, j, f);
+        GL11.glDisable(3042);
+        super.render(x, y, tick);
     }
 
-    public void drawAbout(int i, int j, float f) {
+    public void drawAbout(int x, int y, float tick) {
         this.drawBG(0, 0, true);
-        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-        GL11.glEnable((int)3042);
-        GL11.glBindTexture((int)3553, (int)this.minecraft.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/menu.png"));
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glEnable(3042);
+        GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/menu.png"));
         this.drawTexture(this.width / 2 - 36, this.height / 2 - 85, 112, 0, 72, 16);
-        GL11.glDisable((int)3042);
+        GL11.glDisable(3042);
         this.drawCenteredTextWithShadow(this.textRenderer, "Pacman Arcade v0.32", this.width / 2, this.height / 2 - 50, 0xFF0000);
         this.drawCenteredTextWithShadow(this.textRenderer, "by Formulayeti", this.width / 2, this.height / 2 - 40, 65280);
         this.drawCenteredTextWithShadow(this.textRenderer, "Uses 1833+ lines of code", this.width / 2, this.height / 2 - 20, 0xFFFF00);
@@ -437,25 +445,25 @@ public class PacmanArcadeGUI extends Screen {
         this.drawCenteredTextWithShadow(this.textRenderer, "Uses 19 classes", this.width / 2, this.height / 2, 0xFFFF00);
         this.drawCenteredTextWithShadow(this.textRenderer, "Uses 11 image files", this.width / 2, this.height / 2 + 10, 0xFF0000);
         this.drawCenteredTextWithShadow(this.textRenderer, "Uses 7 sound files", this.width / 2, this.height / 2 + 20, 0xFFFF00);
-        super.render(i, j, f);
+        super.render(x, y, tick);
     }
 
-    public void drawDeath(int i, int j, float f, int finalScore) {
+    public void drawDeath(int x, int y, float tick, int finalScore) {
         this.drawBG(0, 0, true);
         this.drawCenteredTextWithShadow(this.textRenderer, "GameOver", this.width / 2, this.height / 2 - 20, 0xFF0000);
         this.drawCenteredTextWithShadow(this.textRenderer, "Your score was: " + finalScore, this.width / 2, this.height / 2 - 10, 0xFFFFFF);
         this.drawCenteredTextWithShadow(this.textRenderer, "again", this.width / 2, this.height / 2 + 65, 0xFFFFFF);
-        GL11.glEnable((int)3042);
-        super.render(i, j, f);
-        GL11.glDisable((int)3042);
+        GL11.glEnable(3042);
+        super.render(x, y, tick);
+        GL11.glDisable(3042);
     }
 
     public void drawBG(int x, int y, boolean black) {
-        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-        GL11.glEnable((int)3042);
-        GL11.glBindTexture((int)3553, (int)this.minecraft.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/bg.png"));
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glEnable(3042);
+        GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/bg.png"));
         this.drawTexture(this.width / 2 - 100 + x, this.height / 2 - 116 + y, 0, 0, 200, 232);
-        GL11.glDisable((int)3042);
+        GL11.glDisable(3042);
         if (black) {
             this.fill(this.width / 2 - 84 + x, this.height / 2 - 100 + y, this.width / 2 + 84 + x, this.height / 2 + 100 + y, -16777216);
         }
@@ -463,11 +471,11 @@ public class PacmanArcadeGUI extends Screen {
 
     public void drawLives(int x, int y) {
         for (int i = 0; i < this.lives; ++i) {
-            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-            GL11.glEnable((int)3042);
-            GL11.glBindTexture((int)3553, (int)this.minecraft.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/sprites.png"));
+            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            GL11.glEnable(3042);
+            GL11.glBindTexture(3553, this.minecraft.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/sprites.png"));
             this.drawTexture(this.width / 2 - 8 + x + i * 10, this.height / 2 - 8 + y, 32, 0, 8, 8);
-            GL11.glDisable((int)3042);
+            GL11.glDisable(3042);
         }
     }
 

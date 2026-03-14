@@ -11,7 +11,7 @@ public class GameMap {
     public boolean[][] dots = new boolean[21][21];
     public boolean[][] energizers = new boolean[21][21];
     public PacmanArcadeGUI gui;
-    private DrawContextUnlocked context = new DrawContextUnlocked();
+    private final DrawContextUnlocked context = new DrawContextUnlocked();
 
     public GameMap(String[] board, PacmanArcadeGUI gui) {
         this.board = board;
@@ -58,11 +58,11 @@ public class GameMap {
     public void render(Minecraft mc, Screen gui, int xOffset, int yOffset) {
         for (int y = 0; y < this.board.length; ++y) {
             for (int x = 0; x < this.board[0].length(); ++x) {
-                GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-                GL11.glEnable((int)3042);
-                GL11.glBindTexture((int)3553, (int)mc.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/map.png"));
+                GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+                GL11.glEnable(3042);
+                GL11.glBindTexture(3553, mc.textureManager.getTextureId("/assets/pacman_arcade/pacman_textures/map.png"));
                 gui.drawTexture(gui.width / 2 - 84 + x * 8 + xOffset, gui.height / 2 - 84 + y * 8 + yOffset, this.getTileTypeAt(x, y) * 8, 0, 8, 8);
-                GL11.glDisable((int)3042);
+                GL11.glDisable(3042);
                 if (this.dots[y][x]) {
                     context.fill(gui.width / 2 - 84 + x * 8 + 3 + xOffset, gui.height / 2 - 84 + y * 8 + yOffset + 3, gui.width / 2 - 84 + x * 8 + xOffset + 5, gui.height / 2 - 84 + y * 8 + yOffset + 5, -1);
                 }
@@ -97,7 +97,7 @@ public class GameMap {
         return Character.getNumericValue(this.board[y].charAt(x));
     }
 
-    class DrawContextUnlocked extends DrawContext {
+    static class DrawContextUnlocked extends DrawContext {
         public void fill(int x1, int y1, int x2, int y2, int color) {
             super.fill(x1, y1, x2, y2, color);
         }

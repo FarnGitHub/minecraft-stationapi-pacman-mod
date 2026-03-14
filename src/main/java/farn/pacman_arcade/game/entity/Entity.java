@@ -20,10 +20,7 @@ public class Entity {
     public Rectangle boundingBox;
     public String[] board;
     public Random rand = new Random();
-    public boolean movingUp;
-    public boolean movingLeft;
-    public boolean movingDown;
-    public boolean movingRight;
+    public int movingDirection;
     public boolean isMoving;
 
     public Entity(String[] board, int startX, int startY, int width, int height) {
@@ -37,75 +34,46 @@ public class Entity {
         this.board = board;
     }
 
-    public void setMoving(int direction) {
-        if (direction == 3) {
-            this.movingUp = true;
-            this.movingLeft = false;
-            this.movingDown = false;
-            this.movingRight = false;
-        }
-        if (direction == 2) {
-            this.movingUp = false;
-            this.movingLeft = true;
-            this.movingDown = false;
-            this.movingRight = false;
-        }
-        if (direction == 1) {
-            this.movingUp = false;
-            this.movingLeft = false;
-            this.movingDown = true;
-            this.movingRight = false;
-        }
-        if (direction == 0) {
-            this.movingUp = false;
-            this.movingLeft = false;
-            this.movingDown = false;
-            this.movingRight = true;
-        }
-        if (direction == 5) {
-            this.movingUp = false;
-            this.movingLeft = false;
-            this.movingDown = false;
-            this.movingRight = false;
-        }
+    public void setMovingDirection(int direction) {
+        movingDirection = direction;
     }
 
     public boolean canMove(int direction) {
-        switch (direction) {
-            case 0: {
-                return this.getTile(this.currentX + 8, this.currentY) == 0 || this.getTile(this.currentX + 8, this.currentY) == 12 || this.getTile(this.currentX + 8, this.currentY) == 14 || this.getTile(this.currentX + 8, this.currentY) == 15;
-            }
-            case 1: {
-                return this.getTile(this.currentX, this.currentY + 8) == 0 || this.getTile(this.currentX, this.currentY + 8) == 12 || this.getTile(this.currentX, this.currentY + 8) == 14 || this.getTile(this.currentX, this.currentY + 8) == 15;
-            }
-            case 2: {
-                return this.getTile(this.currentX - 8, this.currentY) == 0 || this.getTile(this.currentX - 8, this.currentY) == 12 || this.getTile(this.currentX - 8, this.currentY) == 14 || this.getTile(this.currentX - 8, this.currentY) == 15;
-            }
-            case 3: {
-                return this.getTile(this.currentX, this.currentY - 8) == 0 || this.getTile(this.currentX, this.currentY - 8) == 12 || this.getTile(this.currentX, this.currentY - 8) == 14 || this.getTile(this.currentX, this.currentY - 8) == 15;
-            }
-        }
-        return false;
+        return switch (direction) {
+            case 0 ->
+                    this.getTile(this.currentX + 8, this.currentY) == 0 || this.getTile(this.currentX + 8, this.currentY) == 12 || this.getTile(this.currentX + 8, this.currentY) == 14 || this.getTile(this.currentX + 8, this.currentY) == 15;
+            case 1 ->
+                    this.getTile(this.currentX, this.currentY + 8) == 0 || this.getTile(this.currentX, this.currentY + 8) == 12 || this.getTile(this.currentX, this.currentY + 8) == 14 || this.getTile(this.currentX, this.currentY + 8) == 15;
+            case 2 ->
+                    this.getTile(this.currentX - 8, this.currentY) == 0 || this.getTile(this.currentX - 8, this.currentY) == 12 || this.getTile(this.currentX - 8, this.currentY) == 14 || this.getTile(this.currentX - 8, this.currentY) == 15;
+            case 3 ->
+                    this.getTile(this.currentX, this.currentY - 8) == 0 || this.getTile(this.currentX, this.currentY - 8) == 12 || this.getTile(this.currentX, this.currentY - 8) == 14 || this.getTile(this.currentX, this.currentY - 8) == 15;
+            default -> false;
+        };
     }
 
     public void move(PacmanArcadeGUI gui) {
         if (gui.tick % (long)this.speed == 0L && gui.started) {
-            if (this.movingUp && this.canMove(3)) {
+            if(canMove(movingDirection)) {
                 this.isMoving = true;
-                this.setDirection(3);
-                this.updateY(-8);
-            } else if (this.movingLeft && this.canMove(2)) {
-                this.isMoving = true;
-                this.setDirection(2);
-                this.updateX(-8);
-            } else if (this.movingDown && this.canMove(1)) {
-                this.isMoving = true;
-                this.setDirection(1);
-                this.updateY(8);
-            } else if (this.movingRight && this.canMove(0)) {
-                this.isMoving = true;
-                this.setDirection(0);
-                this.updateX(8);
+                this.setDirection(movingDirection);
+                switch (movingDirection) {
+                    case 3: {
+                        this.updateY(-8);
+                        break;
+                    }
+                    case 2: {
+                        this.updateX(-8);
+                        break;
+                    }
+                    case 1: {
+                        this.updateY(8);
+                        break;
+                    }
+                    case 0: {
+                        this.updateX(8);
+                    }
+                }
             } else {
                 this.isMoving = false;
             }

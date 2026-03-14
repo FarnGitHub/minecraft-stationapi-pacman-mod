@@ -25,8 +25,8 @@ public class PacManTextureListener {
         frontTexture = getTexture(terrainAtlas, "block/pacman/arcade_front");
         leftTexture = getTexture(terrainAtlas, "block/pacman/arcade_left");
         rightTexture = getTexture(terrainAtlas, "block/pacman/arcade_right");
-        PacmanMain.pacmanItem.setTexture(PacmanMain.NAMESPACE.id("item/pacman_arcade_icon"));
-        PacmanMain.pacmanCoins.setTexture(PacmanMain.NAMESPACE.id("item/pacman_coins"));
+        PacmanMain.arcadeBlockItem.setTexture(PacmanMain.NAMESPACE.id("item/pacman_arcade_icon"));
+        PacmanMain.coins.setTexture(PacmanMain.NAMESPACE.id("item/pacman_coins"));
         int[] sides = new int[]{3, 2, 5, 4, 5, 4, 2, 3, 2, 3, 4, 5, 4, 5, 3, 2};
         for(int i = 0; i < sides.length; i++) {
             textures[i] = setTexture(sides[i]);

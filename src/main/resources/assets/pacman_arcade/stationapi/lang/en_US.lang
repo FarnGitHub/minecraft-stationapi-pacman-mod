@@ -1,2 +1,4 @@
 item.pacman_arcade.pacman_arcade_item.name=Pacman Arcade
 item.pacman_arcade.coins.name=Coins
+achievement.pacman_arcade:pacman_open_arcade=Paku Man!
+achievement.pacman_arcade:pacman_open_arcade.desc=Insert coin to pacman arcade machine

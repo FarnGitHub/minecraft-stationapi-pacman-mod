@@ -42,13 +42,9 @@ extends Entity {
             if (this.currentTile == 16) {
                 if (this.getTile(this.currentX - 8, this.currentY) == 16 && this.getTile(this.currentX + 8, this.currentY) != 16 && direction == 2) {
                     return true;
-                }
-                if (this.getTile(this.currentX - 8, this.currentY) != 16 && this.getTile(this.currentX + 8, this.currentY) == 16 && direction == 0) {
+                } else if (this.getTile(this.currentX - 8, this.currentY) != 16 && this.getTile(this.currentX + 8, this.currentY) == 16 && direction == 0) {
                     return true;
-                }
-                if (this.getTile(this.currentX - 8, this.currentY) == 16 && this.getTile(this.currentX + 8, this.currentY) == 16 && direction == 3) {
-                    return true;
-                }
+                } else return this.getTile(this.currentX - 8, this.currentY) == 16 && this.getTile(this.currentX + 8, this.currentY) == 16 && direction == 3;
             }
         }
         return false;
@@ -61,71 +57,71 @@ extends Entity {
     public void decision(PacmanArcadeGUI gui, int x, int y) {
         if (x == this.currentX && y > this.currentY) {
             if (this.canMove(1)) {
-                this.setMoving(1);
+                this.setMovingDirection(1);
             } else if (this.canMove(2) || this.canMove(0)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 2 : 0);
+                this.setMovingDirection(i == 1 ? 2 : 0);
             } else if (this.canMove(3)) {
-                this.setMoving(3);
+                this.setMovingDirection(3);
             }
         } else if (x == this.currentX && y < this.currentY) {
             if (this.canMove(3)) {
-                this.setMoving(3);
+                this.setMovingDirection(3);
             } else if (this.canMove(2) || this.canMove(0)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 2 : 0);
+                this.setMovingDirection(i == 1 ? 2 : 0);
             } else if (this.canMove(1)) {
-                this.setMoving(1);
+                this.setMovingDirection(1);
             }
         } else if (x < this.currentX && y == this.currentY) {
             if (this.canMove(2)) {
-                this.setMoving(2);
+                this.setMovingDirection(2);
             } else if (this.canMove(3) || this.canMove(1)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 3 : 1);
+                this.setMovingDirection(i == 1 ? 3 : 1);
             } else if (this.canMove(0)) {
-                this.setMoving(0);
+                this.setMovingDirection(0);
             }
         } else if (x > this.currentX && y == this.currentY) {
             if (this.canMove(0)) {
-                this.setMoving(0);
+                this.setMovingDirection(0);
             } else if (this.canMove(3) || this.canMove(1)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 3 : 1);
+                this.setMovingDirection(i == 1 ? 3 : 1);
             } else if (this.canMove(2)) {
-                this.setMoving(2);
+                this.setMovingDirection(2);
             }
         } else if (x > this.currentX && y > this.currentY) {
             if (this.canMove(0) || this.canMove(1)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 0 : 1);
+                this.setMovingDirection(i == 1 ? 0 : 1);
             } else if (this.canMove(3) || this.canMove(2)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 3 : 2);
+                this.setMovingDirection(i == 1 ? 3 : 2);
             }
         } else if (x < this.currentX && y < this.currentY) {
             if (this.canMove(2) || this.canMove(3)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 2 : 3);
+                this.setMovingDirection(i == 1 ? 2 : 3);
             } else if (this.canMove(0) || this.canMove(1)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 0 : 1);
+                this.setMovingDirection(i == 1 ? 0 : 1);
             }
         } else if (x > this.currentX && y < this.currentY) {
             if (this.canMove(0) || this.canMove(3)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 0 : 3);
+                this.setMovingDirection(i == 1 ? 0 : 3);
             } else if (this.canMove(2) || this.canMove(1)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 2 : 1);
+                this.setMovingDirection(i == 1 ? 2 : 1);
             }
         } else if (x < this.currentX && y > this.currentY) {
             if (this.canMove(2) || this.canMove(1)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 2 : 1);
+                this.setMovingDirection(i == 1 ? 2 : 1);
             } else if (this.canMove(3) || this.canMove(0)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 3 : 0);
+                this.setMovingDirection(i == 1 ? 3 : 0);
             }
         }
     }
@@ -133,71 +129,71 @@ extends Entity {
     public void decision1(PacmanArcadeGUI gui, int x, int y) {
         if (x == this.currentX && y > this.currentY) {
             if (this.canMove(3)) {
-                this.setMoving(3);
+                this.setMovingDirection(3);
             } else if (this.canMove(2) || this.canMove(0)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 2 : 0);
+                this.setMovingDirection(i == 1 ? 2 : 0);
             } else if (this.canMove(1)) {
-                this.setMoving(1);
+                this.setMovingDirection(1);
             }
         } else if (x == this.currentX && y < this.currentY) {
             if (this.canMove(1)) {
-                this.setMoving(1);
+                this.setMovingDirection(1);
             } else if (this.canMove(2) || this.canMove(0)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 2 : 0);
+                this.setMovingDirection(i == 1 ? 2 : 0);
             } else if (this.canMove(3)) {
-                this.setMoving(3);
+                this.setMovingDirection(3);
             }
         } else if (x < this.currentX && y == this.currentY) {
             if (this.canMove(0)) {
-                this.setMoving(0);
+                this.setMovingDirection(0);
             } else if (this.canMove(3) || this.canMove(1)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 3 : 1);
+                this.setMovingDirection(i == 1 ? 3 : 1);
             } else if (this.canMove(2)) {
-                this.setMoving(2);
+                this.setMovingDirection(2);
             }
         } else if (x > this.currentX && y == this.currentY) {
             if (this.canMove(2)) {
-                this.setMoving(2);
+                this.setMovingDirection(2);
             } else if (this.canMove(3) || this.canMove(1)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 3 : 1);
+                this.setMovingDirection(i == 1 ? 3 : 1);
             } else if (this.canMove(0)) {
-                this.setMoving(0);
+                this.setMovingDirection(0);
             }
         } else if (x > this.currentX && y > this.currentY) {
             if (this.canMove(3) || this.canMove(2)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 3 : 2);
+                this.setMovingDirection(i == 1 ? 3 : 2);
             } else if (this.canMove(1) || this.canMove(0)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 1 : 0);
+                this.setMovingDirection(i == 1 ? 1 : 0);
             }
         } else if (x < this.currentX && y < this.currentY) {
             if (this.canMove(0) || this.canMove(1)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 0 : 1);
+                this.setMovingDirection(i == 1 ? 0 : 1);
             } else if (this.canMove(2) || this.canMove(3)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 2 : 3);
+                this.setMovingDirection(i == 1 ? 2 : 3);
             }
         } else if (x > this.currentX && y < this.currentY) {
             if (this.canMove(2) || this.canMove(1)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 2 : 1);
+                this.setMovingDirection(i == 1 ? 2 : 1);
             } else if (this.canMove(3) || this.canMove(0)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 3 : 0);
+                this.setMovingDirection(i == 1 ? 3 : 0);
             }
         } else if (x < this.currentX && y > this.currentY) {
             if (this.canMove(3) || this.canMove(0)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 3 : 0);
+                this.setMovingDirection(i == 1 ? 3 : 0);
             } else if (this.canMove(3) || this.canMove(0)) {
                 int i = this.rand.nextInt(2);
-                this.setMoving(i == 1 ? 2 : 1);
+                this.setMovingDirection(i == 1 ? 2 : 1);
             }
         }
     }
@@ -205,17 +201,17 @@ extends Entity {
     @Override
     public void update(Minecraft mc, PacmanArcadeGUI gui, GameMap theMap) {
         if (this.currentTile == 13) {
-            this.setMoving(3);
+            this.setMovingDirection(3);
         }
         if (this.currentTile == 16) {
             if (this.getTile(this.currentX - 8, this.currentY) == 16 && this.getTile(this.currentX + 8, this.currentY) != 16) {
-                this.setMoving(2);
+                this.setMovingDirection(2);
             }
             if (this.getTile(this.currentX - 8, this.currentY) != 16 && this.getTile(this.currentX + 8, this.currentY) == 16) {
-                this.setMoving(0);
+                this.setMovingDirection(0);
             }
             if (this.getTile(this.currentX - 8, this.currentY) == 16 && this.getTile(this.currentX + 8, this.currentY) == 16) {
-                this.setMoving(3);
+                this.setMovingDirection(3);
             }
         }
         if (this.getMode() == 0) {

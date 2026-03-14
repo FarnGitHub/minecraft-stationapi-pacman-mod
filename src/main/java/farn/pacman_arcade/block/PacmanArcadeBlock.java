@@ -22,16 +22,13 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.List;
-import java.util.Random;
 
 public class PacmanArcadeBlock extends TemplateBlockWithEntity implements PacmanArcade {
-    public PacmanArcadeBlock(Identifier id, int texture) {
-        super(id, texture, ArcadeMaterial.ARCADE);
-    }
-
-    @Override
-    public int getDroppedItemId(int meta, Random rand) {
-        return PacmanMain.pacmanItem.id;
+    public PacmanArcadeBlock(Identifier id) {
+        super(id, 0, ArcadeMaterial.ARCADE);
+        setHardness(3.0F);
+        setTranslationKey(PacmanMain.NAMESPACE, "pacman_arcade");
+        disableAutoItemRegistration();
     }
 
     @Override
@@ -45,7 +42,7 @@ public class PacmanArcadeBlock extends TemplateBlockWithEntity implements Pacman
 
     @Override
     public void neighborUpdate(World world, int x, int y, int z, int meta) {
-        if (world.getBlockId(x, y + 1, z) != PacmanMain.pacmanArcadeTop.id) {
+        if (world.getBlockId(x, y + 1, z) != PacmanMain.arcadeTop.id) {
             world.setBlock(x, y, z, 0);
         }
     }
@@ -53,8 +50,8 @@ public class PacmanArcadeBlock extends TemplateBlockWithEntity implements Pacman
     @Override
     public void onPlaced(World world, int x, int y, int z) {
         super.onPlaced(world, x, y, z);
-        BlockState newState = PacmanMain.pacmanArcadeTop.getDefaultState().with(Properties.HORIZONTAL_FACING, world.getBlockState(x,y,z).get(Properties.HORIZONTAL_FACING));
-        world.setBlockState(x, y + 1, z, newState);
+        BlockState newState = PacmanMain.arcadeTop.getDefaultState().with(Properties.HORIZONTAL_FACING, world.getBlockState(x,y,z).get(Properties.HORIZONTAL_FACING));
+        world.setBlockStateWithNotify(x, y + 1, z, newState);
     }
 
     @Override
@@ -78,7 +75,7 @@ public class PacmanArcadeBlock extends TemplateBlockWithEntity implements Pacman
 
     @Override
     public List<ItemStack> getDropList(World world, int x, int y, int z, BlockState state, int meta) {
-        return List.of(new ItemStack(PacmanMain.pacmanItem));
+        return List.of(new ItemStack(PacmanMain.arcadeBlockItem));
     }
 
     @Override
@@ -90,18 +87,16 @@ public class PacmanArcadeBlock extends TemplateBlockWithEntity implements Pacman
                     int coinsStacks = pacman.coins / 64;
                     coinsLeft = pacman.coins % 64;
                     for(int i = 0; i < coinsStacks; i++)
-                        player.inventory.addStack(new ItemStack(PacmanMain.pacmanCoins, 64));
+                        player.inventory.addStack(new ItemStack(PacmanMain.coins, 64));
                 }
                 if(coinsLeft > 0) {
-                    player.inventory.addStack(new ItemStack(PacmanMain.pacmanCoins, coinsLeft));
+                    player.inventory.addStack(new ItemStack(PacmanMain.coins, coinsLeft));
                 }
                 pacman.coins = 0;
                 return true;
-            } else if(pacman.insertCoins(player)) {
-                this.openArcadeScreen(player);
-                return true;
+            } else {
+                return pacman.openArcade(player);
             }
-
         }
         return false;
     }
@@ -119,12 +114,17 @@ public class PacmanArcadeBlock extends TemplateBlockWithEntity implements Pacman
     }
 
     public void onBreak(World world, int x, int y, int z) {
-        dropCoins(world, x, y, z);
+        if(!world.isRemote && world.getBlockEntity(x,y,z) instanceof PacManBlockEntity pacman && pacman.coins > 0) {
+            int coinsLeft = pacman.coins;
+            if(coinsLeft > 64) {
+                int coinsStacks = pacman.coins / 64;
+                coinsLeft = pacman.coins % 64;
+                for(int i = 0; i < coinsStacks; i++)
+                    this.dropStack(world,x,y,z, new ItemStack(PacmanMain.coins, 64));
+            }
+            if(coinsLeft > 0)
+                this.dropStack(world,x,y,z, new ItemStack(PacmanMain.coins, coinsLeft));
+        }
         super.onBreak(world, x, y, z);
-    }
-
-    @Override
-    public void BlockDropStack(World world, int x, int y, int z, ItemStack stack) {
-        this.dropStack(world, x, y, z, stack);
     }
 }
