@@ -1,13 +1,11 @@
 package farn.pacman_arcade;
 
-import farn.pacman_arcade.block.PacmanArcadeBlock;
+import farn.pacman_arcade.block.PacmanArcadeBlockBottom;
 import farn.pacman_arcade.block.PacmanArcadeBlockTop;
 import farn.pacman_arcade.block.entity.PacManBlockEntity;
 import farn.pacman_arcade.packet.OpenScreenPacket;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
-import net.minecraft.block.MapColor;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
@@ -31,11 +29,10 @@ public class PacmanMain {
 	public static Block arcadeTop;
 	public static Item arcadeBlockItem;
 	public static Item coins;
-	public static Material metalMaterial = new Material(MapColor.LIGHT_GRAY);
 
 	@EventListener
 	public void registerBlock(BlockRegistryEvent event) {
-		arcadeBottom = new PacmanArcadeBlock(NAMESPACE.id("pacman_arcade_block_bottom"));
+		arcadeBottom = new PacmanArcadeBlockBottom(NAMESPACE.id("pacman_arcade_block_bottom"));
 		arcadeTop = new PacmanArcadeBlockTop(NAMESPACE.id("pacman_arcade_block_top"));
 	}
 

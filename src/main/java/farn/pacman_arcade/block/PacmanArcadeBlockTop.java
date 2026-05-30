@@ -1,8 +1,8 @@
 package farn.pacman_arcade.block;
 
 import farn.pacman_arcade.PacmanMain;
-import farn.pacman_arcade.block.material.ArcadeMaterial;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class PacmanArcadeBlockTop extends TemplateBlock implements PacmanArcade {
     public PacmanArcadeBlockTop(Identifier id) {
-        super(id, 0, ArcadeMaterial.ARCADE);
+        super(id, 0, Material.METAL);
         setHardness(3.0F);
         setTranslationKey(PacmanMain.NAMESPACE, "pacman_arcade");
         disableAutoItemRegistration();

@@ -3,11 +3,11 @@ package farn.pacman_arcade.block;
 import farn.pacman_arcade.PacManTextureListener;
 import farn.pacman_arcade.PacmanMain;
 import farn.pacman_arcade.block.entity.PacManBlockEntity;
-import farn.pacman_arcade.block.material.ArcadeMaterial;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -23,9 +23,9 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.List;
 
-public class PacmanArcadeBlock extends TemplateBlockWithEntity implements PacmanArcade {
-    public PacmanArcadeBlock(Identifier id) {
-        super(id, 0, ArcadeMaterial.ARCADE);
+public class PacmanArcadeBlockBottom extends TemplateBlockWithEntity implements PacmanArcade {
+    public PacmanArcadeBlockBottom(Identifier id) {
+        super(id, 0, Material.METAL);
         setHardness(3.0F);
         setTranslationKey(PacmanMain.NAMESPACE, "pacman_arcade");
         disableAutoItemRegistration();
