@@ -57,7 +57,7 @@ public class PacmanMain {
 
 	@EventListener
 	public void registerBlockEntity(BlockEntityRegisterEvent event) {
-		event.register(PacManBlockEntity.class, NAMESPACE.id("arcade_block_entity").toString());
+		event.register(NAMESPACE.id("arcade_block_entity"), PacManBlockEntity.class);
 	}
 
 	@EventListener

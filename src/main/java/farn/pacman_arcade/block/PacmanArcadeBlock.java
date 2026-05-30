@@ -51,7 +51,7 @@ public class PacmanArcadeBlock extends TemplateBlockWithEntity implements Pacman
     public void onPlaced(World world, int x, int y, int z) {
         super.onPlaced(world, x, y, z);
         BlockState newState = PacmanMain.arcadeTop.getDefaultState().with(Properties.HORIZONTAL_FACING, world.getBlockState(x,y,z).get(Properties.HORIZONTAL_FACING));
-        world.setBlockStateWithNotify(x, y + 1, z, newState);
+        world.setBlockState(x, y + 1, z, newState);
     }
 
     @Override
